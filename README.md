@@ -1,3 +1,3 @@
 # hello_world
-First try 
+First try \n
 second try
