@@ -1,0 +1,59 @@
+#coding = utf-8
+import json
+
+import pygal
+
+from operator import itemgetter
+
+from pygal.style import LightColorizedStyle as LCS 
+
+from pygal.style import LightenStyle as LS
+
+file_name = (r'C:\Users\qiuyingjie\Desktop\python_project\data_analysis\gdp.json.txt')
+
+with open(file_name) as f:
+	countries_gdp = json.load(f)
+#需求：将最近一年的各国Gdp呈现在图像上
+#创建一个空的字典 将需要的数据保存
+countries = []
+for country_gdp in countries_gdp:
+	if country_gdp['Year'] == "2016-08-25":
+		country_code = country_gdp['Country Code']
+		# print(country_name)
+		country_value = float(country_gdp['Value'])
+		# print(country_value)
+		gdp_dicts = {'code':country_code,'value':country_value,}
+		countries.append(gdp_dicts)
+		print(country_code + ':' + str(country_value))
+print(countries[0])
+countries = sorted(countries,key = itemgetter('value'),reverse = True )
+print(countries[0])
+#利用itemgetter 方法来将 countrie按 gdp收入的大小排序后再赋值
+# countries = sorted(countries,key = itemgetter(country_value),reverse = True)
+# print(countries[0])
+#取排序的gdp 前30 并生成条形统计图
+code,gdp = [],[]
+for key in countries[:31]:
+	code.append(key['code'])
+	gdp.append(key['value'])
+my_style = LS('#336699',base_style = LCS)
+
+chart = pygal.Bar(style = my_style,x_label_rotation = 45,show_legend = True)
+
+chart.title = 'The  GDP  of  30  Country '
+chart.x_labels = code
+
+chart.add('',gdp)
+chart.render_to_file('GDP.svg')
+
+
+
+
+
+
+
+
+
+
+
+
